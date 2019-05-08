@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'pages/auth.dart';
 import 'pages/products_admin.dart';
 import 'pages/products.dart';
 import 'pages/product.dart';
@@ -56,7 +55,7 @@ class _MyAppState extends State<MyApp>{
         }
         if(pathElement[1] == 'product') {
           final int index = int.parse(pathElement[2]);
-          return MaterialPageRoute(
+          return MaterialPageRoute<bool>(
             builder: (BuildContext context) => ProductPage(
               _products[index]['title'], 
               _products[index]['image']
