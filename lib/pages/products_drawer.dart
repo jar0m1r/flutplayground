@@ -19,6 +19,12 @@ class ProductsDrawer extends StatelessWidget {
             ListTile(
               title: Text('List Products'),
               onTap: (){
+                Navigator.pushReplacementNamed(context, '/products');
+              }
+            ),
+            ListTile(
+              title: Text('login'),
+              onTap: (){
                 Navigator.pushReplacementNamed(context, '/');
               }
             )

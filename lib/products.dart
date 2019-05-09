@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Products extends StatelessWidget {
-  final List<Map<String, String>> products;
-  final Function deleteProduct;
+  final List<Map<String, dynamic>> products;
 
-  Products(this.products,{this.deleteProduct} ) {
+  Products(this.products) {
     print('[Products Widget] Constructor');
   }
 
@@ -17,7 +16,32 @@ class Products extends StatelessWidget {
             colorBlendMode: BlendMode.softLight, 
             color: Colors.amber
             ),
-          Text(products[index]['title']),
+          Container(
+            margin: EdgeInsets.only(top: 20.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: <Widget>[
+                Text(
+                  products[index]['title'],
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Cinzel'
+                  )
+                ),
+                SizedBox(width: 8.0),
+                Text(
+                  products[index]['price'].toString(),
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Cinzel'
+                  )
+                )
+              ],
+            )
+          ),
           ButtonBar(
             alignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -26,11 +50,12 @@ class Products extends StatelessWidget {
                 onPressed: () => Navigator.pushNamed<bool>( //Push returns a Future which returns a generic (bool) type
                   context, 
                  '/product/' + index.toString() 
-                ).then((bool value) {
-                  if(value) {
-                    deleteProduct(index);
-                  }
-                })
+                )
+                // .then((bool value) {
+                //   if(value) {
+                //     deleteProduct(index);
+                //   }
+                // })
               )
             ]
             )
