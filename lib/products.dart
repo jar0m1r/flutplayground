@@ -19,6 +19,7 @@ class Products extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: 20.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.baseline,
               textBaseline: TextBaseline.alphabetic,
               children: <Widget>[
@@ -27,19 +28,52 @@ class Products extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold,
-                    fontFamily: 'Cinzel'
+                    fontFamily: 'Assistant'
                   )
                 ),
-                SizedBox(width: 8.0),
-                Text(
-                  products[index]['price'].toString(),
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.normal,
-                    fontFamily: 'Cinzel'
-                  )
+                SizedBox(width: 18.0),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 2.5, horizontal: 6.0),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).accentColor,
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  child: Text(
+                    '\$${products[index]['price'].toString()}',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w300,
+                      fontFamily: 'Assistant',
+                      color: Colors.white
+                    )
+                  ),
                 )
               ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  padding: 
+                    EdgeInsets.symmetric(vertical: 2.5, horizontal: 6.0),
+                  decoration: 
+                    BoxDecoration(
+                      borderRadius: BorderRadius.circular(4.0),
+                      border: Border.all(width: 0.5, color: Colors.grey),),
+                  child: 
+                    Text(
+                      'Veilinghaven, Utrecht',
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.normal,
+                        fontFamily: 'Assistant'
+                      )
+                    )
+                )
+              ]
             )
           ),
           ButtonBar(
@@ -47,7 +81,7 @@ class Products extends StatelessWidget {
             children: <Widget>[
               FlatButton(
                 child: Text('Details'),
-                onPressed: () => Navigator.pushNamed<bool>( //Push returns a Future which returns a generic (bool) type
+                onPressed: () => Navigator.pushNamed<bool>( // Push returns a Future which returns a generic (bool) type
                   context, 
                  '/product/' + index.toString() 
                 )

@@ -8,22 +8,22 @@ class ProductsDrawer extends StatelessWidget {
           children: <Widget>[
             AppBar(
               automaticallyImplyLeading: false,
-              title: Text('Choose')
+              title: Text('Go to ...')
             ),
             ListTile(
-              title: Text('Manage Products'),
+              title: Text('Manage Products', style: TextStyle(fontSize: 16.0),),
               onTap: (){
                 Navigator.pushReplacementNamed(context, '/admin');
               }
             ),
             ListTile(
-              title: Text('List Products'),
+              title: Text('List Products', style: TextStyle(fontSize: 16.0)),
               onTap: (){
                 Navigator.pushReplacementNamed(context, '/products');
               }
             ),
             ListTile(
-              title: Text('login'),
+              title: Text('login', style: TextStyle(fontSize: 16.0)),
               onTap: (){
                 Navigator.pushReplacementNamed(context, '/');
               }
