@@ -65,7 +65,7 @@ class Products extends StatelessWidget {
                       border: Border.all(width: 0.5, color: Colors.grey),),
                   child: 
                     Text(
-                      'Veilinghaven, Utrecht',
+                      products[index]['location'],
                       style: TextStyle(
                         fontSize: 14.0,
                         fontWeight: FontWeight.normal,

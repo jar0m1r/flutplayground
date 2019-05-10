@@ -14,6 +14,7 @@ class ProductCreatePage extends StatefulWidget {
 class _ProductCreatePageState extends State<ProductCreatePage> {
   String _titleValue = '';
   String _descriptionValue = '';
+  String _locationValue = '';
   double _priceValue;
 
   @override
@@ -24,7 +25,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
         children: <Widget>[
           TextField(
             decoration: InputDecoration(
-              labelText: 'Product Title',
+              labelText: 'Title',
             ),
             onChanged: (String value){ 
               setState((){ 
@@ -35,7 +36,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
           TextField(
             maxLines: 4,
             decoration: InputDecoration(
-              labelText: 'Product Description',
+              labelText: 'Description',
             ),
             onChanged: (String value){ 
               setState((){ 
@@ -44,9 +45,19 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
             }
           ),
           TextField(
+            decoration: InputDecoration(
+              labelText: 'location',
+            ),
+            onChanged: (String value){ 
+              setState((){ 
+                _locationValue = value;
+              });
+            }
+          ),
+          TextField(
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-              labelText: 'Product Price',
+              labelText: 'Price',
             ),
             onChanged: (String value){ 
               setState((){ 
@@ -64,6 +75,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                 'title': _titleValue,
                 'description': _descriptionValue,
                 'price': _priceValue,
+                'location': _locationValue,
                 'image': 'assets/food.jpg'
               };
               widget.addProduct(product);

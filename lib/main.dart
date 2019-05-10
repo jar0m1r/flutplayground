@@ -20,7 +20,22 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp>{
-  List<Map<String, dynamic>> _products = [];
+  List<Map<String, dynamic>> _products = [
+    {
+      'title': 'Rabarber Cake by Jaro',
+      'description': 'Dit is het. Zoek niet verder want dat is verspilde moeite. Bovendien zou je in dezelfde tijd een lekkere rabarber cake (by Jaro) kunnen eten. Denk niet langer na! Het is nu het moment. Niet straks maar nu!',
+      'price': 12.5,
+      'location': 'Veilinghaven, Utrecht',
+      'image': 'assets/food.jpg'
+    },
+    {
+      'title': 'Happy Fudge Pudge',
+      'description': 'Al eeuwen bekend onder de kenners. Happy is de pudge niet. Fudgers zien dat anders and die moeten deze hebben. Ik sla em over in elk geval.',
+      'price': 37.0,
+      'location': 'Markthal, Rotterdam',
+      'image': 'assets/food.jpg'
+    },
+  ];
 
   void _addProduct(Map<String, dynamic> product) {
     setState(() {
@@ -62,7 +77,10 @@ class _MyAppState extends State<MyApp>{
           return MaterialPageRoute<bool>(
             builder: (BuildContext context) => ProductPage(
               _products[index]['title'], 
-              _products[index]['image']
+              _products[index]['image'],
+              _products[index]['description'],
+              _products[index]['location'],
+              _products[index]['price'],
             )
           );
         }
