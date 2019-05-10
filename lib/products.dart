@@ -79,17 +79,23 @@ class Products extends StatelessWidget {
           ButtonBar(
             alignment: MainAxisAlignment.center,
             children: <Widget>[
-              FlatButton(
-                child: Text('Details'),
+              IconButton(
+                icon: Icon(Icons.info),
+                color: Theme.of(context).primaryColor,
+                // Navigator.PushNamed returns a Future which returns a generic (bool in this case) type, 
+                // so possible to use .then and evaluate/use the bool 
+                onPressed: () => Navigator.pushNamed<bool>(
+                  context, 
+                 '/product/' + index.toString() 
+                )
+              ),
+              IconButton(
+                icon: Icon(Icons.favorite_border),
+                color: Theme.of(context).accentColor,
                 onPressed: () => Navigator.pushNamed<bool>( // Push returns a Future which returns a generic (bool) type
                   context, 
                  '/product/' + index.toString() 
                 )
-                // .then((bool value) {
-                //   if(value) {
-                //     deleteProduct(index);
-                //   }
-                // })
               )
             ]
             )

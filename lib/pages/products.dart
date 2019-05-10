@@ -14,6 +14,14 @@ class ProductsPage extends StatelessWidget {
       drawer: ProductsDrawer(),
       appBar: AppBar(
         title: Text('EasyList'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.favorite),
+            color: Theme.of(context).accentColor,
+            onPressed: (){}
+          )
+        ]
+
       ),
       body: ProductManager(products),
     );

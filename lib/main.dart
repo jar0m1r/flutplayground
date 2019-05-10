@@ -43,6 +43,7 @@ class _MyAppState extends State<MyApp>{
           brightness: Brightness.light,
           primarySwatch: Colors.deepOrange,
           accentColor: Colors.amber,
+          primaryColor: Colors.indigo,
           fontFamily: 'Assistant'
         ),
       //home: AuthPage(),
