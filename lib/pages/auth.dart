@@ -12,7 +12,7 @@ class AuthPageState extends State<AuthPage>{
   String _password = '';
   bool _acceptTerms = false;
 
-  bool _showPAssword = false;
+  bool _showPassword = false;
 
   DecorationImage _buildBackgroundImage(){
     return DecorationImage(
@@ -40,13 +40,13 @@ class AuthPageState extends State<AuthPage>{
 
   Widget _buildPasswordTextField(){
     return TextField(
-      obscureText: !_showPAssword,
+      obscureText: !_showPassword,
       decoration: InputDecoration(
         suffixIcon: IconButton(
           icon: Icon(Icons.remove_red_eye),
           onPressed: (){
             setState((){
-              _showPAssword = !_showPAssword;
+              _showPassword = !_showPassword;
             });
           }
         ),
@@ -84,6 +84,9 @@ class AuthPageState extends State<AuthPage>{
 
   @override
   Widget build(BuildContext context) {
+    final double deviceWidth = MediaQuery.of(context).size.width;
+    final double targetWidth = deviceWidth > 550.0 ? 500.0 : deviceWidth * 0.95;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Login')
@@ -95,27 +98,29 @@ class AuthPageState extends State<AuthPage>{
         padding: EdgeInsets.all(15.0),
         child: Center(
           child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                _buildEmailTextField(),
-                SizedBox(height: 10.0),
-                _buildPasswordTextField(),
-                SizedBox(height: 10.0),
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5.0)
+            child: Container(
+              width: targetWidth,
+              child: Column(
+                children: <Widget>[
+                  _buildEmailTextField(),
+                  SizedBox(height: 10.0),
+                  _buildPasswordTextField(),
+                  SizedBox(height: 10.0),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5.0)
+                    ),
+                    child: _buildAcceptSwitch(),
                   ),
-                  child: _buildAcceptSwitch(),
-                ),
-                SizedBox(height: 20.0),
-                RaisedButton(
-                  color: Theme.of(context).accentColor,
-                  textColor: Colors.white,
-                  child: Text('LOGIN'),
-                  onPressed: _submitForm
-                )
-              ]
+                  SizedBox(height: 20.0),
+                  RaisedButton(
+                    textColor: Colors.white,
+                    child: Text('LOGIN'),
+                    onPressed: _submitForm
+                  )
+                ]
+              ),
             ),
           ),
         ),
