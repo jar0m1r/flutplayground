@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../ui_elements/title_default.dart';
 
 class ProductPage extends StatelessWidget {
   final String title;
@@ -11,29 +12,61 @@ class ProductPage extends StatelessWidget {
 
   _showWarningDialog(BuildContext context){
     return showDialog( // Future so could do .then but in this case using Navigator.pop
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text('Are you sure?'),
-                  content: Text('This action cannot be undone!'),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text('DISCARD'), 
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }
-                    ),
-                    FlatButton(
-                      child: Text('CONTINUE'), 
-                      onPressed: (){
-                        Navigator.pop(context);
-                        Navigator.pop(context, true);
-                      }
-                      )
-                  ]
-                );
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Are you sure?'),
+          content: Text('This action cannot be undone!'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('DISCARD'), 
+              onPressed: () {
+                Navigator.pop(context);
               }
-            );
+            ),
+            FlatButton(
+              child: Text('CONTINUE'), 
+              onPressed: (){
+                Navigator.pop(context);
+                Navigator.pop(context, true);
+              }
+              )
+          ]
+        );
+      }
+    );
+  }
+
+  Widget _buildLocationPriceRow(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          location, 
+          style: TextStyle(
+            fontSize: 14.0,
+            fontWeight: FontWeight.normal
+          )
+        ),
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 6.0),
+          child: Text(
+            '|', 
+            style: TextStyle(
+              fontSize: 14.0,
+              fontWeight: FontWeight.normal
+            )
+          ),
+        ),
+        Text(
+          '\$${price.toString()}', 
+          style: TextStyle(
+            fontSize: 14.0,
+            fontWeight: FontWeight.w300
+          )
+        )
+      ]
+    );
   }
 
   @override
@@ -63,46 +96,9 @@ class ProductPage extends StatelessWidget {
                   )
                 ),
                 padding: EdgeInsets.all(5.0),
-                child: Text(
-                  title, 
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                  )
-                )
+                child: TitleDefault(title)
               ),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      location, 
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.normal
-                      )
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 6.0),
-                      child: Text(
-                        '|', 
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.normal,
-                          color: Theme.of(context).primaryColor
-                        )
-                      ),
-                    ),
-                    Text(
-                      '\$${price.toString()}', 
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w300
-                      )
-                    )
-                  ]
-                )
-              ),
+              _buildLocationPriceRow(),
               SizedBox(height: 15.0),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),

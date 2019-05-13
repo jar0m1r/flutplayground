@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../product_manager.dart';
 import 'products_drawer.dart';
+import '../widgets/Products/products.dart';
 
 
 class ProductsPage extends StatelessWidget {
@@ -23,7 +23,7 @@ class ProductsPage extends StatelessWidget {
         ]
 
       ),
-      body: ProductManager(products),
+      body: Products(products),
     );
   }
 }
