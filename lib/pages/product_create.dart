@@ -17,61 +17,70 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
   String _locationValue = '';
   double _priceValue;
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   Widget _buildTitleTextField() {
-    return TextField(
+    return TextFormField(
       decoration: InputDecoration(
-        labelText: 'Title',
+        labelText: 'Title'
       ),
-      onChanged: (String value){ 
-        setState((){ 
-          _titleValue = value;
-        });
+      validator: (String value){
+        //if anythin gets returned the validation failed 
+        if(value.isEmpty || value.length < 5){
+          return '5 characters minimum';
+        }
+      },
+      onSaved: (String value){
+        _titleValue = value;
       }
     );
   }
 
   Widget _buildDescriptionTextField(){
-    return TextField(
+    return TextFormField(
       maxLines: 4,
       decoration: InputDecoration(
         labelText: 'Description',
       ),
-      onChanged: (String value){ 
-        setState((){ 
-          _descriptionValue = value;
-        });
+      onSaved: (String value){
+        _descriptionValue = value;
       }
     );
   } 
 
   Widget _buildLocationTextField(){
-    return TextField(
+    return TextFormField(
       decoration: InputDecoration(
         labelText: 'location',
       ),
-      onChanged: (String value){ 
-        setState((){ 
-          _locationValue = value;
-        });
+      onSaved: (String value){
+        _locationValue = value;
       }
     );
   }
 
   Widget _buildPriceTextField(){
-    return TextField(
+    return TextFormField(
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
         labelText: 'Price',
       ),
-      onChanged: (String value){ 
-        setState((){ 
-          _priceValue = double.parse(value);
-        });
+      validator: (String value){
+        if(!RegExp(r'^(?:[1-9]\d*|0)?(?:[.,]\d+)?$').hasMatch(value)){
+          return 'only numbers please';
+        }
+      },
+      onSaved: (String value){
+        _priceValue = double.parse(value);
       }
     );
   }  
 
   void _submitForm() {
+    if(!_formKey.currentState.validate()){
+      return;
+    }
+    _formKey.currentState.save();
     final Map<String, dynamic> product = {
       'title': _titleValue,
       'description': _descriptionValue,
@@ -89,23 +98,31 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
     final double targetWidth = deviceWidth > 550.0 ? 500.0 : deviceWidth * 0.95;
     final double targetPadding = deviceWidth - targetWidth;
 
-    return Container(
-      margin: EdgeInsets.all(15.0),
-      child: ListView(
-        padding: EdgeInsets.symmetric(horizontal: targetPadding / 2),
-        children: <Widget>[
-          _buildTitleTextField(),
-          _buildDescriptionTextField(),
-          _buildLocationTextField(),
-          _buildPriceTextField(),
-          SizedBox(height: 15.0), //just some space between
-          RaisedButton(
-            textColor: Colors.white,
-            child: Text('Save'),
-            onPressed: _submitForm
-          )
-        ]
-      )
+    return GestureDetector(
+      onTap: (){
+        FocusScope.of(context).requestFocus(FocusNode()); //! removes the keyboard when tap outside form (but if its on a field it gets preference)
+      },
+      child: Container(
+        margin: EdgeInsets.all(15.0),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            padding: EdgeInsets.symmetric(horizontal: targetPadding / 2),
+            children: <Widget>[
+              _buildTitleTextField(),
+              _buildDescriptionTextField(),
+              _buildLocationTextField(),
+              _buildPriceTextField(),
+              SizedBox(height: 15.0), //just some space between
+              RaisedButton(
+                textColor: Colors.white,
+                child: Text('Save'),
+                onPressed: _submitForm
+              )
+            ]
+          ),
+        )
+      ),
     );
   }
 }
