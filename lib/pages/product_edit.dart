@@ -1,37 +1,44 @@
 import 'package:flutter/material.dart';
 
-class ProductCreatePage extends StatefulWidget {
+class ProductEditPage extends StatefulWidget {
   final Function addProduct;
+  final Function updateProduct;
+  final Map<String, dynamic> product;
+  final int productIndex;
 
-  ProductCreatePage(this.addProduct);
+  ProductEditPage({this.product, this.productIndex, this.updateProduct, this.addProduct});
 
   @override
   State<StatefulWidget> createState() {
-    return _ProductCreatePageState();
+    return _ProductEditPageState();
   }
 }
 
-class _ProductCreatePageState extends State<ProductCreatePage> {
-  String _titleValue = '';
-  String _descriptionValue = '';
-  String _locationValue = '';
-  double _priceValue;
+class _ProductEditPageState extends State<ProductEditPage> {
+  final Map<String, dynamic> _formData = { 
+      'title': null,
+      'description': null,
+      'location': null,
+      'price': null,
+      'image': 'assets/food.jpg'
+    };
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Widget _buildTitleTextField() {
     return TextFormField(
+      initialValue: widget.product != null ? widget.product['title'] : '',
       decoration: InputDecoration(
         labelText: 'Title'
       ),
       validator: (String value){
         //if anythin gets returned the validation failed 
-        if(value.isEmpty || value.length < 5){
+        if(value == null || value.length < 5){
           return '5 characters minimum';
         }
       },
       onSaved: (String value){
-        _titleValue = value;
+        _formData['title'] = value;
       }
     );
   }
@@ -39,28 +46,31 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
   Widget _buildDescriptionTextField(){
     return TextFormField(
       maxLines: 4,
+      initialValue: widget.product != null ? widget.product['description'] : '',
       decoration: InputDecoration(
         labelText: 'Description',
       ),
       onSaved: (String value){
-        _descriptionValue = value;
+        _formData['description'] = value;
       }
     );
   } 
 
   Widget _buildLocationTextField(){
     return TextFormField(
+      initialValue: widget.product != null ? widget.product['location'] : '',
       decoration: InputDecoration(
         labelText: 'location',
       ),
       onSaved: (String value){
-        _locationValue = value;
+        _formData['location'] = value;
       }
     );
   }
 
   Widget _buildPriceTextField(){
     return TextFormField(
+      initialValue: widget.product != null ? widget.product['price'].toString() : '',
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
         labelText: 'Price',
@@ -71,7 +81,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
         }
       },
       onSaved: (String value){
-        _priceValue = double.parse(value);
+        _formData['price'] = double.parse(value);
       }
     );
   }  
@@ -81,14 +91,13 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
       return;
     }
     _formKey.currentState.save();
-    final Map<String, dynamic> product = {
-      'title': _titleValue,
-      'description': _descriptionValue,
-      'price': _priceValue,
-      'location': _locationValue,
-      'image': 'assets/food.jpg'
-    };
-    widget.addProduct(product);
+
+    if(widget.product == null){
+      widget.addProduct(_formData);
+    }else{
+      widget.updateProduct(widget.productIndex, _formData);
+    }
+
     Navigator.pushReplacementNamed(context, '/products');
   }
 
@@ -98,7 +107,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
     final double targetWidth = deviceWidth > 550.0 ? 500.0 : deviceWidth * 0.95;
     final double targetPadding = deviceWidth - targetWidth;
 
-    return GestureDetector(
+    final Widget pageContent = GestureDetector(
       onTap: (){
         FocusScope.of(context).requestFocus(FocusNode()); //! removes the keyboard when tap outside form (but if its on a field it gets preference)
       },
@@ -124,6 +133,12 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
         )
       ),
     );
+    return widget.product == null
+      ? pageContent
+      : Scaffold(
+        appBar: AppBar(title:Text('Edit Product')),
+        body: pageContent
+      );
   }
 }
 

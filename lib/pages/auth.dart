@@ -8,11 +8,14 @@ class AuthPage extends StatefulWidget {
 }
 
 class AuthPageState extends State<AuthPage>{
-  String _email = '';
-  String _password = '';
-  bool _acceptTerms = false;
-
+  final Map<String, dynamic> _formData = {
+    'email': null,
+    'password': null,
+    'acceptTerms': false
+  };
   bool _showPassword = false;
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   DecorationImage _buildBackgroundImage(){
     return DecorationImage(
@@ -23,23 +26,26 @@ class AuthPageState extends State<AuthPage>{
   }
 
   Widget _buildEmailTextField(){
-    return TextField(
+    return TextFormField(
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         labelText: 'email',
         fillColor: Colors.white,
         filled: true
       ),
-      onChanged: (String value){
-        setState((){
-          _email = value;
-        });
+      validator: (String value){
+        if(value.isEmpty || !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(value)){
+          return 'fill in a valid email address';
+        }
+      },
+      onSaved: (String value){
+          _formData['email'] = value;
       }
     );
   }
 
   Widget _buildPasswordTextField(){
-    return TextField(
+    return TextFormField(
       obscureText: !_showPassword,
       decoration: InputDecoration(
         suffixIcon: IconButton(
@@ -54,10 +60,13 @@ class AuthPageState extends State<AuthPage>{
         fillColor: Colors.white,
         filled: true
       ),
-      onChanged: (String value){
-        setState((){
-          _password = value;
-        });
+      validator: (String value){
+        if(value.isEmpty){
+          return 'password must be filled';
+        }
+      },
+      onSaved: (String value){
+          _formData['password'] = value;
       }
     );
   }
@@ -65,17 +74,21 @@ class AuthPageState extends State<AuthPage>{
   _buildAcceptSwitch(){
     return SwitchListTile(
       title: Text('Accept Terms'),
-      value: _acceptTerms,
+      value: _formData['acceptTerms'],
       onChanged: (bool value){
         setState((){
-          _acceptTerms = value;
+          _formData['acceptTerms'] = value;
         });
       }
     );
   }
 
   void _submitForm(){
-    print('logged in with $_email/$_password');
+    if(!_formKey.currentState.validate() || !_formData['acceptTerms']){
+      return;
+    }
+    _formKey.currentState.save();
+    print('logged in with ${_formData['email']}/${_formData['password']}');
     Navigator.pushReplacementNamed( //so you cannot go back to this page
       context, 
       '/products'
@@ -96,30 +109,33 @@ class AuthPageState extends State<AuthPage>{
           image: _buildBackgroundImage()
         ),
         padding: EdgeInsets.all(15.0),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              width: targetWidth,
-              child: Column(
-                children: <Widget>[
-                  _buildEmailTextField(),
-                  SizedBox(height: 10.0),
-                  _buildPasswordTextField(),
-                  SizedBox(height: 10.0),
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(5.0)
+        child: Form(
+          key: _formKey,
+          child: Center(
+            child: SingleChildScrollView(
+              child: Container(
+                width: targetWidth,
+                child: Column(
+                  children: <Widget>[
+                    _buildEmailTextField(),
+                    SizedBox(height: 10.0),
+                    _buildPasswordTextField(),
+                    SizedBox(height: 10.0),
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5.0)
+                      ),
+                      child: _buildAcceptSwitch(),
                     ),
-                    child: _buildAcceptSwitch(),
-                  ),
-                  SizedBox(height: 20.0),
-                  RaisedButton(
-                    textColor: Colors.white,
-                    child: Text('LOGIN'),
-                    onPressed: _submitForm
-                  )
-                ]
+                    SizedBox(height: 20.0),
+                    RaisedButton(
+                      textColor: Colors.white,
+                      child: Text('LOGIN'),
+                      onPressed: _submitForm
+                    )
+                  ]
+                ),
               ),
             ),
           ),
