@@ -101,13 +101,12 @@ class _ProductEditPageState extends State<ProductEditPage> {
     Navigator.pushReplacementNamed(context, '/products');
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildPageContent(BuildContext context) {
     final double deviceWidth = MediaQuery.of(context).size.width;
     final double targetWidth = deviceWidth > 550.0 ? 500.0 : deviceWidth * 0.95;
     final double targetPadding = deviceWidth - targetWidth;
 
-    final Widget pageContent = GestureDetector(
+    return GestureDetector(
       onTap: (){
         FocusScope.of(context).requestFocus(FocusNode()); //! removes the keyboard when tap outside form (but if its on a field it gets preference)
       },
@@ -133,11 +132,15 @@ class _ProductEditPageState extends State<ProductEditPage> {
         )
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return widget.product == null
-      ? pageContent
+      ? _buildPageContent(context)
       : Scaffold(
         appBar: AppBar(title:Text('Edit Product')),
-        body: pageContent
+        body: _buildPageContent(context)
       );
   }
 }
