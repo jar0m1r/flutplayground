@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import '../ui_elements/title_default.dart';
+import '../models/product.dart';
+
 
 class ProductPage extends StatelessWidget {
-  final String title;
-  final String imageUrl;
-  final String description;
-  final String location;
-  final double price;
+  final Product product;
 
-  ProductPage(this.title, this.imageUrl, this.description, this.location, this.price);
+  ProductPage(this.product);
 
   _showWarningDialog(BuildContext context){
     return showDialog( // Future so could do .then but in this case using Navigator.pop
@@ -42,7 +40,7 @@ class ProductPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-          location, 
+          product.location, 
           style: TextStyle(
             fontSize: 14.0,
             fontWeight: FontWeight.normal
@@ -59,7 +57,7 @@ class ProductPage extends StatelessWidget {
           ),
         ),
         Text(
-          '\$${price.toString()}', 
+          '\$${product.price.toString()}', 
           style: TextStyle(
             fontSize: 14.0,
             fontWeight: FontWeight.w300
@@ -79,13 +77,13 @@ class ProductPage extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(title)
+          title: Text(product.title)
         ),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset(imageUrl),
+              Image.asset(product.image),
               Container(
                 decoration: BoxDecoration(
                   border: Border(
@@ -96,14 +94,14 @@ class ProductPage extends StatelessWidget {
                   )
                 ),
                 padding: EdgeInsets.all(5.0),
-                child: TitleDefault(title)
+                child: TitleDefault(product.title)
               ),
               _buildLocationPriceRow(),
               SizedBox(height: 15.0),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: Text(
-                  description, 
+                  product.description, 
                   style: TextStyle(
                     fontSize: 14.0,
                     fontWeight: FontWeight.normal

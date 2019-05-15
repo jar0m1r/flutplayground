@@ -3,6 +3,7 @@ import 'pages/products_admin.dart';
 import 'pages/products.dart';
 import 'pages/product.dart';
 import 'pages/auth.dart';
+import 'models/product.dart';
 // import 'package:flutter/rendering.dart';
 
 void main() {
@@ -20,31 +21,31 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp>{
-  List<Map<String, dynamic>> _products = [
-    {
-      'title': 'Rabarber Cake by Jaro',
-      'description': 'Dit is het. Zoek niet verder want dat is verspilde moeite. Bovendien zou je in dezelfde tijd een lekkere rabarber cake (by Jaro) kunnen eten. Denk niet langer na! Het is nu het moment. Niet straks maar nu!',
-      'price': 12.5,
-      'location': 'Veilinghaven, Utrecht',
-      'image': 'assets/food.jpg'
-    },
-    {
-      'title': 'Happy Fudge Pudge',
-      'description': 'Al eeuwen bekend onder de kenners. Happy is de pudge niet. Fudgers zien dat anders and die moeten deze hebben. Ik sla em over in elk geval.',
-      'price': 37.0,
-      'location': 'Markthal, Rotterdam',
-      'image': 'assets/food.jpg'
-    },
+  List<Product> _products = [
+    Product(
+      title: 'Rabarber Cake by Jaro',
+      description: 'Dit is het. Zoek niet verder want dat is verspilde moeite. Bovendien zou je in dezelfde tijd een lekkere rabarber cake (by Jaro) kunnen eten. Denk niet langer na! Het is nu het moment. Niet straks maar nu!',
+      price: 12.5,
+      location: 'Veilinghaven, Utrecht',
+      image: 'assets/food.jpg'
+    ),
+    Product(
+      title: 'Happy Fudge Pudge',
+      description: 'Al eeuwen bekend onder de kenners. Happy is de pudge niet. Fudgers zien dat anders and die moeten deze hebben. Ik sla em over in elk geval.',
+      price: 37.0,
+      location: 'Markthal, Rotterdam',
+      image: 'assets/food.jpg'
+    )
   ];
 
-  void _addProduct(Map<String, dynamic> product) {
+  void _addProduct(Product product) {
     setState(() {
       _products.add(product);
     });
     print(_products);
   }
 
-  void _updateProduct(int index, Map<String, dynamic> product){
+  void _updateProduct(int index, Product product){
     setState((){
       _products[index] = product;
     });
@@ -82,13 +83,7 @@ class _MyAppState extends State<MyApp>{
         if(pathElement[1] == 'product') {
           final int index = int.parse(pathElement[2]);
           return MaterialPageRoute<bool>(
-            builder: (BuildContext context) => ProductPage(
-              _products[index]['title'], 
-              _products[index]['image'],
-              _products[index]['description'],
-              _products[index]['location'],
-              _products[index]['price'],
-            )
+            builder: (BuildContext context) => ProductPage(_products[index])
           );
         }
         return null;

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import '../models/product.dart';
 
 class ProductEditPage extends StatefulWidget {
   final Function addProduct;
   final Function updateProduct;
-  final Map<String, dynamic> product;
+  final Product product;
   final int productIndex;
 
-  ProductEditPage({this.product, this.productIndex, this.updateProduct, this.addProduct});
+  ProductEditPage({this.product, this.productIndex, this.addProduct, this.updateProduct});
 
   @override
   State<StatefulWidget> createState() {
@@ -27,7 +28,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
 
   Widget _buildTitleTextField() {
     return TextFormField(
-      initialValue: widget.product != null ? widget.product['title'] : '',
+      initialValue: widget.product != null ? widget.product.title : '',
       decoration: InputDecoration(
         labelText: 'Title'
       ),
@@ -46,7 +47,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
   Widget _buildDescriptionTextField(){
     return TextFormField(
       maxLines: 4,
-      initialValue: widget.product != null ? widget.product['description'] : '',
+      initialValue: widget.product != null ? widget.product.description : '',
       decoration: InputDecoration(
         labelText: 'Description',
       ),
@@ -58,7 +59,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
 
   Widget _buildLocationTextField(){
     return TextFormField(
-      initialValue: widget.product != null ? widget.product['location'] : '',
+      initialValue: widget.product != null ? widget.product.location : '',
       decoration: InputDecoration(
         labelText: 'location',
       ),
@@ -70,7 +71,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
 
   Widget _buildPriceTextField(){
     return TextFormField(
-      initialValue: widget.product != null ? widget.product['price'].toString() : '',
+      initialValue: widget.product != null ? widget.product.price.toString() : '',
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
         labelText: 'Price',
@@ -92,10 +93,18 @@ class _ProductEditPageState extends State<ProductEditPage> {
     }
     _formKey.currentState.save();
 
+    Product formProduct = Product(
+      title: _formData['title'],
+      description: _formData['description'],
+      location: _formData['location'],
+      price: _formData['price'],
+      image: 'assets/food.jpg'
+    );
+
     if(widget.product == null){
-      widget.addProduct(_formData);
+      widget.addProduct(formProduct);
     }else{
-      widget.updateProduct(widget.productIndex, _formData);
+      widget.updateProduct(widget.productIndex, formProduct);
     }
 
     Navigator.pushReplacementNamed(context, '/products');
