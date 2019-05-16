@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+
 import '../ui_elements/title_default.dart';
+import '../scoped-models/products.dart';
 import '../models/product.dart';
 
 
 class ProductPage extends StatelessWidget {
-  final Product product;
+  final int productIndex;
 
-  ProductPage(this.product);
+  ProductPage(this.productIndex);
 
   _showWarningDialog(BuildContext context){
     return showDialog( // Future so could do .then but in this case using Navigator.pop
@@ -35,7 +38,7 @@ class ProductPage extends StatelessWidget {
     );
   }
 
-  Widget _buildLocationPriceRow(){
+  Widget _buildLocationPriceRow(Product product){
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -75,53 +78,58 @@ class ProductPage extends StatelessWidget {
         Navigator.pop(context, false);
         return Future.value(false); //basically blocks further popping because row before already popped
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(product.title)
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(product.image),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
+      child: ScopedModelDescendant<ProductsModel>(
+        builder: (BuildContext context, Widget child, ProductsModel model){
+          Product product = model.products[productIndex];
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(product.title)
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(product.image),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Theme.of(context).accentColor,
+                          width: 2.0
+                        )
+                      )
+                    ),
+                    padding: EdgeInsets.all(5.0),
+                    child: TitleDefault(product.title)
+                  ),
+                  _buildLocationPriceRow(product),
+                  SizedBox(height: 15.0),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text(
+                      product.description, 
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.normal
+                      )
+                    )
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(5.0),
+                    child: IconButton(
+                      iconSize: 50.0,
+                      icon: Icon(Icons.delete_forever),
                       color: Theme.of(context).accentColor,
-                      width: 2.0
+                      //onPressed: () => Navigator.pop(context, true)
+                      onPressed: () => _showWarningDialog(context) //anonymous function reference
+
                     )
                   )
-                ),
-                padding: EdgeInsets.all(5.0),
-                child: TitleDefault(product.title)
+                ]
               ),
-              _buildLocationPriceRow(),
-              SizedBox(height: 15.0),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                child: Text(
-                  product.description, 
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.normal
-                  )
-                )
-              ),
-              Container(
-                padding: EdgeInsets.all(5.0),
-                child: IconButton(
-                  iconSize: 50.0,
-                  icon: Icon(Icons.delete_forever),
-                  color: Theme.of(context).accentColor,
-                  //onPressed: () => Navigator.pop(context, true)
-                  onPressed: () => _showWarningDialog(context) //anonymous function reference
-
-                )
-              )
-            ]
-          ),
-        )
+            )
+          );
+        }
       )
     );
   }
