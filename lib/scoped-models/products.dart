@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../models/product.dart';
 
-class ProductsModel extends Model{
+mixin ProductsModel on Model{
   Map<String, Product> _products = {
     'asgasgasdgasdg': Product(
       id: 'asgasgasdgasdg',
