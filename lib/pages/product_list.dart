@@ -5,14 +5,14 @@ import 'product_edit.dart';
 
 class ProductListPage extends StatelessWidget {
 
-  Widget _buildEditButton(BuildContext context, int index){
+  Widget _buildEditButton(BuildContext context, String id){
     return IconButton(
       icon: Icon(Icons.edit),
       onPressed: (){
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (BuildContext context){
-              return ProductEditPage(index);
+              return ProductEditPage(id);
             }
           )
         );
@@ -32,10 +32,10 @@ class ProductListPage extends StatelessWidget {
               onDismissed: (DismissDirection direction){
                 if(direction == DismissDirection.endToStart){
                   print('Dismissed end to start');
-                  model.deleteProduct(index);
+                  model.deleteProduct(model.products[index].id);
                 }else if(direction == DismissDirection.startToEnd){
                   print('Dismissed end to start');
-                  model.deleteProduct(index);
+                  model.deleteProduct(model.products[index].id);
                 }else{
                   print('Dismissed other direction');
                 }
@@ -48,7 +48,7 @@ class ProductListPage extends StatelessWidget {
                     ),
                     title: Text('${model.products[index].title}'),
                     subtitle: Text('\$${model.products[index].price.toString()}'),
-                    trailing: _buildEditButton(context, index)
+                    trailing: _buildEditButton(context, model.products[index].id)
                   ),
                   Divider()
                 ]

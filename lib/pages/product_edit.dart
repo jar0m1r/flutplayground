@@ -5,9 +5,9 @@ import '../models/product.dart';
 import '../scoped-models/products.dart';
 
 class ProductEditPage extends StatefulWidget {
-  final int productIndex;
+  final String productId;
 
-  ProductEditPage([this.productIndex]);
+  ProductEditPage([this.productId]);
 
   @override
   State<StatefulWidget> createState() {
@@ -16,7 +16,9 @@ class ProductEditPage extends StatefulWidget {
 }
 
 class _ProductEditPageState extends State<ProductEditPage> {
+
   final Map<String, dynamic> _formData = { 
+      'id': null,
       'title': null,
       'description': null,
       'location': null,
@@ -94,6 +96,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
     _formKey.currentState.save();
 
     Product formProduct = Product(
+      id: widget.productId,
       title: _formData['title'],
       description: _formData['description'],
       location: _formData['location'],
@@ -104,7 +107,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
     if(product == null){
       addProduct(formProduct);
     }else{
-      updateProduct(widget.productIndex, formProduct);
+      updateProduct(formProduct);
     }
 
     Navigator.pushReplacementNamed(context, '/products');
@@ -154,11 +157,11 @@ class _ProductEditPageState extends State<ProductEditPage> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<ProductsModel>(
       builder: (BuildContext context, Widget child, ProductsModel model){
-        return  widget.productIndex == null
+        return  widget.productId == null
           ? _buildPageContent(context)
           : Scaffold(
               appBar: AppBar(title:Text('Edit Product')),
-              body: _buildPageContent(context, model.products[widget.productIndex])
+              body: _buildPageContent(context, model.product(widget.productId))
             );
       }
     );

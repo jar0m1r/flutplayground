@@ -7,9 +7,9 @@ import '../models/product.dart';
 
 
 class ProductPage extends StatelessWidget {
-  final int productIndex;
+  final String productId;
 
-  ProductPage(this.productIndex);
+  ProductPage(this.productId);
 
   _showWarningDialog(BuildContext context){
     return showDialog( // Future so could do .then but in this case using Navigator.pop
@@ -80,7 +80,7 @@ class ProductPage extends StatelessWidget {
       },
       child: ScopedModelDescendant<ProductsModel>(
         builder: (BuildContext context, Widget child, ProductsModel model){
-          Product product = model.products[productIndex];
+          Product product = model.product(productId);
           return Scaffold(
             appBar: AppBar(
               title: Text(product.title)

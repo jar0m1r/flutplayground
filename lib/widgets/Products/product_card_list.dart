@@ -4,13 +4,17 @@ import '../../models/product.dart';
 import '../../scoped-models/products.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class Products extends StatelessWidget {
+class ProductCardListView extends StatelessWidget {
+  final bool displayFavoritesOnly;
+
+  ProductCardListView({this.displayFavoritesOnly = false});
+
   Widget _buildProductList(List<Product> products) {
     Widget productCards;
     if (products.length > 0) {
       productCards = ListView.builder(
         itemBuilder: (BuildContext context, int index) => 
-          ProductCard(products[index], index),
+          ProductCard(products[index]),
         itemCount: products.length,
       );
     } else {
@@ -21,10 +25,13 @@ class Products extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('[Products Widget] build()');
     return ScopedModelDescendant<ProductsModel>(
       builder: (BuildContext context, Widget child, ProductsModel model){
-        return _buildProductList(model.products);
+        if(displayFavoritesOnly){
+          return _buildProductList(model.products.where((product) => product.isFavorite).toList());
+        }else{
+          return _buildProductList(model.products);
+        }
       }
     );
   }

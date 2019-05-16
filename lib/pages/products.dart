@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'products_drawer.dart';
-import '../widgets/Products/products.dart';
+import '../widgets/Products/product_card_list.dart';
 
 
-class ProductsPage extends StatelessWidget {
+class ProductsPage extends StatefulWidget {
+  @override
+  State<ProductsPage> createState() {
+    return ProductsPageState();
+  }
+}
+
+class ProductsPageState extends State<ProductsPage>{
+  bool displayFavoritesOnly = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,14 +20,16 @@ class ProductsPage extends StatelessWidget {
         title: Text('EasyList'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.favorite),
+            icon: Icon(displayFavoritesOnly ? Icons.favorite : Icons.favorite_border),
             color: Theme.of(context).accentColor,
-            onPressed: (){}
+            onPressed: (){
+              setState((){displayFavoritesOnly = !displayFavoritesOnly;});
+            }
           )
         ]
 
       ),
-      body: Products(),
+      body: ProductCardListView(displayFavoritesOnly : displayFavoritesOnly),
     );
   }
 }

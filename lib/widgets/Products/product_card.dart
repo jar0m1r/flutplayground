@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+import '../../scoped-models/products.dart';
 import '../../ui_elements/title_default.dart';
 import '../../ui_elements/location_tag.dart';
 import '../../models/product.dart';
@@ -6,9 +8,8 @@ import 'price_tag.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
-  final int productIndex;
 
-  ProductCard(this.product, this.productIndex);
+  ProductCard(this.product);
 
   Widget _buildTitlePriceRow(){
     return Row(
@@ -34,16 +35,17 @@ class ProductCard extends StatelessWidget {
           // so possible to use .then and evaluate/use the bool 
           onPressed: () => Navigator.pushNamed<bool>(
             context, 
-            '/product/' + productIndex.toString() 
+            '/product/' + product.id
           )
         ),
-        IconButton( // ! favorite button
-          icon: Icon(Icons.favorite_border),
-          color: Theme.of(context).accentColor,
-          onPressed: () => Navigator.pushNamed<bool>( // Push returns a Future which returns a generic (bool) type
-            context, 
-            '/product/' + productIndex.toString() 
-          )
+        ScopedModelDescendant(
+          builder: (BuildContext context, Widget child, ProductsModel model){
+            return IconButton( // ! favorite button
+              icon: Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border),
+              color: Theme.of(context).accentColor,
+              onPressed: () => model.toggleIsFavorite(product.id)
+            );
+          }
         )
       ]
     );
