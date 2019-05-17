@@ -27,15 +27,15 @@ class ProductListPage extends StatelessWidget {
         return ListView.builder(
           itemBuilder: (BuildContext context, int index){
             return Dismissible(
-              key: Key(model.products[index].title), //!fix later
+              key: Key(model.productList[index].title), //!fix later
               background: Container(color: Colors.red),
               onDismissed: (DismissDirection direction){
                 if(direction == DismissDirection.endToStart){
                   print('Dismissed end to start');
-                  model.deleteProduct(model.products[index].id);
+                  model.deleteProduct(model.productList[index].id);
                 }else if(direction == DismissDirection.startToEnd){
                   print('Dismissed end to start');
-                  model.deleteProduct(model.products[index].id);
+                  model.deleteProduct(model.productList[index].id);
                 }else{
                   print('Dismissed other direction');
                 }
@@ -44,18 +44,18 @@ class ProductListPage extends StatelessWidget {
                 children: <Widget>[
                   ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: AssetImage(model.products[index].image),
+                      backgroundImage: AssetImage(model.productList[index].image),
                     ),
-                    title: Text('${model.products[index].title}'),
-                    subtitle: Text('\$${model.products[index].price.toString()}'),
-                    trailing: _buildEditButton(context, model.products[index].id)
+                    title: Text('${model.productList[index].title}'),
+                    subtitle: Text('\$${model.productList[index].price.toString()}'),
+                    trailing: _buildEditButton(context, model.productList[index].id)
                   ),
                   Divider()
                 ]
               ),
             );
           },
-          itemCount: model.products.length,
+          itemCount: model.productList.length,
         );
       }
     );

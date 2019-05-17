@@ -28,9 +28,9 @@ class ProductCardListView extends StatelessWidget {
     return ScopedModelDescendant<MainModel>(
       builder: (BuildContext context, Widget child, MainModel model){
         if(displayFavoritesOnly){
-          return _buildProductList(model.products.where((product) => product.isFavorite).toList());
+          return _buildProductList(model.productList.where((product) => product.isFavorite).toList());
         }else{
-          return _buildProductList(model.products);
+          return _buildProductList(model.productList);
         }
       }
     );

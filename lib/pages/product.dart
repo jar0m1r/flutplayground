@@ -114,6 +114,21 @@ class ProductPage extends StatelessWidget {
                       )
                     )
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children:[
+                        Text(
+                          'created by: ${product.createdById}',
+                          style: TextStyle(
+                            fontSize: 11.0,
+                            fontWeight: FontWeight.w300
+                          ),
+                        )
+                      ]
+                    ),
+                  ),
                   Container(
                     padding: EdgeInsets.all(5.0),
                     child: IconButton(

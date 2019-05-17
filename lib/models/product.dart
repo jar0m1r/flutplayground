@@ -7,6 +7,7 @@ class Product{
   final String location;
   final double price;
   final String image;
+  final String createdById;
   final bool isFavorite;
 
   Product({
@@ -16,6 +17,7 @@ class Product{
     @required this.location, 
     @required this.price, 
     @required this.image,
+    @required this.createdById,
     this.isFavorite = false
     });
 }

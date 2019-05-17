@@ -101,6 +101,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
       description: _formData['description'],
       location: _formData['location'],
       price: _formData['price'],
+      createdById: null,
       image: 'assets/food.jpg'
     );
 
