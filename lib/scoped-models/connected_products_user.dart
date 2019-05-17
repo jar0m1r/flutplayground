@@ -3,6 +3,10 @@ import 'package:scoped_model/scoped_model.dart';
 import '../models/user.dart';
 import '../models/product.dart';
 
+/*
+ ! Problem here is the fact that (in order to let other mixins on MainModel access the properties products and AuthenticatedUser)
+ ! the properties are exposed (not private), this could only be prevented by putting all Model Classes in one file. 
+*/
 mixin ConnectedProductsUserModel on Model {
 
   User authenticatedUser;
@@ -15,7 +19,7 @@ mixin ConnectedProductsUserModel on Model {
       price: 12.5,
       location: 'Veilinghaven, Utrecht',
       image: 'assets/food.jpg',
-      createdById: 'asgasdgzsgasg',
+      createdById: 'fix', // ! fix
       isFavorite: false
     ),
     'gfdfahshsdfzdf': Product(
@@ -25,7 +29,7 @@ mixin ConnectedProductsUserModel on Model {
       price: 37.0,
       location: 'Markthal, Rotterdam',
       image: 'assets/food.jpg',
-      createdById: 'asgasdgzsgasg',
+      createdById: 'fix', // ! fix
       isFavorite: true
     )
   };
@@ -39,9 +43,9 @@ mixin ConnectedProductsUserModel on Model {
       price: product.price,
       image: product.image,
       createdById: authenticatedUser.id, //! this is the reason why it is in the connected model, connecting user and product data
-      isFavorite: product.isFavorite
+      isFavorite: product.isFavorite     // ? but maybe it is better to keep models separate and let the page handle providing User data ?
     );
-    products[newProduct.id] = newProduct; //!fix
+    products[newProduct.id] = newProduct; // ! fix
     notifyListeners();
   }
 
