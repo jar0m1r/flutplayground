@@ -1,5 +1,6 @@
 import 'package:scoped_model/scoped_model.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import '../models/user.dart';
 import '../models/product.dart';
 
@@ -35,18 +36,58 @@ mixin ConnectedProductsUserModel on Model {
   };
 
    void addProduct(Product product) {
-    Product newProduct = Product(
-      id: 'id${product.title}',
-      title: product.title,
-      description: product.description,
-      location: product.location,
-      price: product.price,
-      image: product.image,
-      createdById: authenticatedUser.id, //! this is the reason why it is in the connected model, connecting user and product data
-      isFavorite: product.isFavorite     // ? but maybe it is better to keep models separate and let the page handle providing User data ?
-    );
-    products[newProduct.id] = newProduct; // ! fix
-    notifyListeners();
+      Map<String, dynamic> newProductMap = {
+      'title': product.title,
+      'description': product.description,
+      'location': product.location,
+      'price': product.price,
+      'image': product.image,
+      'createdById': authenticatedUser != null ? authenticatedUser.id : 'abcdefg', //! this is the reason why it is in the connected model, connecting user and product data
+      'isFavorite': product.isFavorite     // ? but maybe it is better to keep models separate and let the page handle providing User data ?
+      };
+     http.post(
+      'https://flutplayground.firebaseio.com/products.json',
+      body: json.encode(newProductMap)
+      )
+      .then((http.Response response){
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        Product newProduct = Product(
+          id: responseData['name'],
+          title: product.title,
+          description: product.description,
+          location: product.location,
+          price: product.price,
+          image: product.image,
+          createdById: authenticatedUser != null ? authenticatedUser.id : 'abcdefg', //! this is the reason why it is in the connected model, connecting user and product data
+          isFavorite: product.isFavorite     // ? but maybe it is better to keep models separate and let the page handle providing User data ?
+        );
+        products[newProduct.id] = newProduct; // ! fix
+        notifyListeners();
+      });
+  }
+
+  void fetchProducts(){
+    http
+    .get('https://flutplayground.firebaseio.com/products.json')
+    .then((http.Response response) {
+      final Map<String, Product> fetchedProducts = {};
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      responseData.forEach((String productId, dynamic data) {
+        final Product product = Product(
+          id: productId,
+          title: data['title'],
+          description: data['description'],
+          location: data['location'],
+          price: data['price'],
+          image: data['image'],
+          createdById: data['createdById'],
+          isFavorite: data['isFavorite']
+        );
+        fetchedProducts[productId] = product;
+      });
+      products = fetchedProducts;
+      notifyListeners();
+    });
   }
 
 
