@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'products_drawer.dart';
 import '../widgets/Products/product_card_list.dart';
 import '../scoped-models/main.dart';
@@ -22,6 +23,19 @@ class ProductsPageState extends State<ProductsPage>{
     print('Init products page state');
   }
 
+  Widget _buildCardList(){
+    return ScopedModelDescendant<MainModel>(
+      builder: (BuildContext context, Widget child, MainModel model){
+        if(model.isFetchingProducts){
+          return Center(child: CircularProgressIndicator());
+        }else if(!model.isFetchingProducts && model.productList.length > 0){
+          return ProductCardListView(displayFavoritesOnly : displayFavoritesOnly);
+        }else{
+          return Center(child: Text('No products to show'));
+        }
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +53,7 @@ class ProductsPageState extends State<ProductsPage>{
         ]
 
       ),
-      body: ProductCardListView(displayFavoritesOnly : displayFavoritesOnly),
+      body: _buildCardList()
     );
   }
 }

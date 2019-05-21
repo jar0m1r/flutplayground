@@ -29,7 +29,7 @@ class ProductCard extends StatelessWidget {
       alignment: MainAxisAlignment.center,
       children: <Widget>[
         IconButton( // ! info button
-          icon: Icon(Icons.info),
+          icon: Icon(Icons.local_dining),
           color: Theme.of(context).primaryColor,
           // Navigator.PushNamed returns a Future which returns a generic (bool in this case) type, 
           // so possible to use .then and evaluate/use the bool 
@@ -72,15 +72,20 @@ class ProductCard extends StatelessWidget {
     return Card(
       child: Column(
         children: <Widget>[
-          _buildImage(),
+          Stack(
+            alignment: AlignmentDirectional.bottomCenter,
+            children: [
+              _buildImage(),
+              Container( // ! location
+                margin: EdgeInsets.only(bottom: 10.0),
+                alignment: Alignment.topLeft,
+                child: LocationTag(product.location)
+              )
+            ]
+          ),
           Container( // ! title & price
             margin: EdgeInsets.only(top: 20.0),
             child: _buildTitlePriceRow(),
-          ),
-          Container( // ! location
-            margin: EdgeInsets.only(top: 20.0),
-            alignment: Alignment.center,
-            child: LocationTag(product.location)
           ),
           _buildActionButtons(context)
         ],

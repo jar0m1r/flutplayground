@@ -1,5 +1,6 @@
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
+import 'dart:async';
 import 'dart:convert';
 import '../models/user.dart';
 import '../models/product.dart';
@@ -35,7 +36,9 @@ mixin ConnectedProductsUserModel on Model {
     )
   };
 
-   void addProduct(Product product) {
+   Future<Null> addProduct(Product product) {
+     _isAddingProducts = true;
+     notifyListeners();
       Map<String, dynamic> newProductMap = {
       'title': product.title,
       'description': product.description,
@@ -45,7 +48,7 @@ mixin ConnectedProductsUserModel on Model {
       'createdById': authenticatedUser != null ? authenticatedUser.id : 'abcdefg', //! this is the reason why it is in the connected model, connecting user and product data
       'isFavorite': product.isFavorite     // ? but maybe it is better to keep models separate and let the page handle providing User data ?
       };
-     http.post(
+     return http.post(
       'https://flutplayground.firebaseio.com/products.json',
       body: json.encode(newProductMap)
       )
@@ -62,16 +65,30 @@ mixin ConnectedProductsUserModel on Model {
           isFavorite: product.isFavorite     // ? but maybe it is better to keep models separate and let the page handle providing User data ?
         );
         products[newProduct.id] = newProduct;
+        _isAddingProducts = false;
         notifyListeners();
       });
   }
 
+  bool _isAddingProducts = false;
+  bool get isAddingProducts{
+    return _isAddingProducts;
+  }
+
   void fetchProducts(){
+    _isFetchingProducts = true;
     http
     .get('https://flutplayground.firebaseio.com/products.json')
     .then((http.Response response) {
       final Map<String, Product> fetchedProducts = {};
       final Map<String, dynamic> responseData = json.decode(response.body);
+
+      if(responseData == null){
+        _isFetchingProducts = false;
+        notifyListeners();
+        return;
+      }
+
       responseData.forEach((String productId, dynamic data) {
         final Product product = Product(
           id: productId,
@@ -86,9 +103,14 @@ mixin ConnectedProductsUserModel on Model {
         fetchedProducts[productId] = product;
       });
       products = fetchedProducts;
+      _isFetchingProducts = false;
       notifyListeners();
     });
   }
 
+  bool _isFetchingProducts = false;
+  bool get isFetchingProducts{
+    return _isFetchingProducts;
+  }
 
 }

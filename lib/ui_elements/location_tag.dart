@@ -10,14 +10,17 @@ class LocationTag extends StatelessWidget {
     return Container(
         padding: 
           EdgeInsets.symmetric(vertical: 2.5, horizontal: 6.0),
+          margin: 
+            EdgeInsets.symmetric(horizontal: 10.0),
         decoration: 
           BoxDecoration(
+            color: Colors.white,
             borderRadius: BorderRadius.circular(4.0),
-            border: Border.all(width: 0.5, color: Colors.grey),),
+            border: Border.all(width: 1.0, color: Colors.black),),
         child: Text(
         location,
         style: TextStyle(
-          fontSize: 14.0,
+          fontSize: 16.0,
           fontWeight: FontWeight.normal,
           fontFamily: 'Assistant'
         )

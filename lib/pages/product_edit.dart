@@ -106,22 +106,25 @@ class _ProductEditPageState extends State<ProductEditPage> {
     );
 
     if(product == null){
-      addProduct(formProduct);
+      addProduct(formProduct)
+      .then((_){
+        Navigator.pushReplacementNamed(context, '/products');
+      });
     }else{
       updateProduct(formProduct);
     }
-
-    Navigator.pushReplacementNamed(context, '/products');
   }
 
   Widget _buildSubmitButton(Product product){
     return ScopedModelDescendant<MainModel>(
       builder: (BuildContext context, Widget child, MainModel model){
-        return RaisedButton(
-          textColor: Colors.white,
-          child: Text('Save'),
-          onPressed: () => _submitForm(product, model.addProduct, model.updateProduct)
-        );
+        return model.isAddingProducts 
+          ? Center(child: CircularProgressIndicator())
+          : RaisedButton(
+            textColor: Colors.white,
+            child: Text('Save'),
+            onPressed: () => _submitForm(product, model.addProduct, model.updateProduct)
+          );
     });
   }
 

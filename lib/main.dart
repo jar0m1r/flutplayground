@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp>{
             brightness: Brightness.light,
             primarySwatch: Colors.deepOrange,
             accentColor: Colors.amber,
-            primaryColor: Colors.indigo,
+            primaryColor: Colors.teal,
             buttonColor: Colors.amber,
             fontFamily: 'Assistant'
           ),
