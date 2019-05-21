@@ -89,7 +89,7 @@ class ProductPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(product.image),
+                  product.image.startsWith('assets') ? Image.asset(product.image) : Image.network(product.image),
                   Container(
                     decoration: BoxDecoration(
                       border: Border(

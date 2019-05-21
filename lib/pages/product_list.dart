@@ -26,6 +26,7 @@ class ProductListPage extends StatelessWidget {
       builder: (BuildContext context, Widget child, MainModel model){
         return ListView.builder(
           itemBuilder: (BuildContext context, int index){
+            final String imageUrl = model.productList[index].image;
             return Dismissible(
               key: Key(model.productList[index].title), //!fix later
               background: Container(color: Colors.red),
@@ -44,7 +45,7 @@ class ProductListPage extends StatelessWidget {
                 children: <Widget>[
                   ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: AssetImage(model.productList[index].image),
+                      backgroundImage: imageUrl.startsWith('assets') ? AssetImage(imageUrl) : NetworkImage(imageUrl),
                     ),
                     title: Text('${model.productList[index].title}'),
                     subtitle: Text('\$${model.productList[index].price.toString()}'),

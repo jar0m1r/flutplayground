@@ -61,7 +61,7 @@ mixin ConnectedProductsUserModel on Model {
           createdById: authenticatedUser != null ? authenticatedUser.id : 'abcdefg', //! this is the reason why it is in the connected model, connecting user and product data
           isFavorite: product.isFavorite     // ? but maybe it is better to keep models separate and let the page handle providing User data ?
         );
-        products[newProduct.id] = newProduct; // ! fix
+        products[newProduct.id] = newProduct;
         notifyListeners();
       });
   }

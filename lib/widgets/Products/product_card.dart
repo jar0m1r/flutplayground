@@ -51,16 +51,28 @@ class ProductCard extends StatelessWidget {
     );
   }
 
+  Widget _buildImage(){
+    return product.image.startsWith('assets') 
+    ? Image.asset(
+        product.image, 
+        fit: BoxFit.cover, 
+        colorBlendMode: BlendMode.softLight, 
+        color: Colors.amber
+      )
+    : Image.network(
+        product.image, 
+        fit: BoxFit.cover, 
+        colorBlendMode: BlendMode.softLight, 
+        color: Colors.amber
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
       child: Column(
         children: <Widget>[
-          Image.asset(product.image, 
-            fit: BoxFit.cover, 
-            colorBlendMode: BlendMode.softLight, 
-            color: Colors.amber
-            ),
+          _buildImage(),
           Container( // ! title & price
             margin: EdgeInsets.only(top: 20.0),
             child: _buildTitlePriceRow(),
