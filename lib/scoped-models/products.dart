@@ -64,8 +64,16 @@ mixin ProductsModel on ConnectedProductsUserModel{
   } 
 
   void deleteProduct(String id){
-    products.remove(id);
-    notifyListeners();
+    http.delete('https://flutplayground.firebaseio.com/products/$id.json')
+    .then((http.Response response){
+      products.remove(id);
+      notifyListeners();
+    });
+  }
+
+  bool _isDeletingProduct = false;
+  bool get isDeletingProduct{
+    return _isDeletingProduct;
   }
 
   void toggleIsFavorite(String id){
