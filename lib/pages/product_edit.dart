@@ -107,18 +107,17 @@ class _ProductEditPageState extends State<ProductEditPage> {
 
     if(product == null){
       addProduct(formProduct)
-      .then((_){
-        Navigator.pushReplacementNamed(context, '/products');
-      });
+      .then((_) => Navigator.pushReplacementNamed(context, '/products'));
     }else{
-      updateProduct(formProduct);
+      updateProduct(formProduct)
+      .then((_) => Navigator.pushReplacementNamed(context, '/products'));
     }
   }
 
   Widget _buildSubmitButton(Product product){
     return ScopedModelDescendant<MainModel>(
       builder: (BuildContext context, Widget child, MainModel model){
-        return model.isAddingProducts 
+        return model.isAddingProducts || model.isUpdatingProduct 
           ? Center(child: CircularProgressIndicator())
           : RaisedButton(
             textColor: Colors.white,
