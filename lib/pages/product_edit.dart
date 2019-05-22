@@ -107,13 +107,53 @@ class _ProductEditPageState extends State<ProductEditPage> {
 
     if(product == null){
       addProduct(formProduct)
-      .then((_) => Navigator.pushReplacementNamed(context, '/products'));
+      .then((bool success){
+        if(success){
+          Navigator.pushReplacementNamed(context, '/products');
+        }else{
+          return showDialog(
+            context: context,
+            builder: (BuildContext context){
+              return AlertDialog(
+                title: Text('Something went wrong..'),
+                content: Text('There was an error while adding the new product to the server. Please try again.'),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('Got it.'),
+                    onPressed: () => Navigator.of(context).pop()
+                  )
+                ]
+              );
+            }
+          );
+        }
+      });
     }else{
       updateProduct(formProduct)
-      .then((_) => Navigator.pushReplacementNamed(context, '/products'));
+      .then((bool success){
+        if(success){
+          Navigator.pushReplacementNamed(context, '/products');
+        }else{
+          return showDialog(
+            context: context,
+            builder: (BuildContext context){
+              return AlertDialog(
+                title: Text('Something went wrong..'),
+                content: Text('There was an error while updating the product to the server. Please try again.'),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('Got it.'),
+                    onPressed: () => Navigator.of(context).pop()
+                  )
+                ]
+              );
+            }
+          );
+        }
+      });
     }
   }
-
+  
   Widget _buildSubmitButton(Product product){
     return ScopedModelDescendant<MainModel>(
       builder: (BuildContext context, Widget child, MainModel model){
@@ -170,19 +210,3 @@ class _ProductEditPageState extends State<ProductEditPage> {
     );
   }
 }
-
-// return Center(
-//       child: RaisedButton(
-//         child: Text('SAVE'),
-//         onPressed: (){
-//           showModalBottomSheet(
-//             context: context,
-//             builder: (BuildContext context){
-//               return Center(
-//                 child: Text('This is a Modal!')
-//               );
-//             }
-//           )
-//         }
-//       )
-//     );

@@ -59,12 +59,16 @@ class ProductCard extends StatelessWidget {
         colorBlendMode: BlendMode.softLight, 
         color: Colors.amber
       )
-    : Image.network(
-        product.image, 
-        fit: BoxFit.cover, 
-        colorBlendMode: BlendMode.softLight, 
-        color: Colors.amber
-    );
+    : FadeInImage(
+        fit: BoxFit.cover,
+        height: 300.0,
+        placeholder: AssetImage(
+          'assets/food.jpg', 
+        ),
+        image: NetworkImage(
+          product.image
+        )
+      );
   }
 
   @override

@@ -17,7 +17,7 @@ mixin ProductsModel on ConnectedProductsUserModel{
     return products[id];
   }
 
-  Future<Null> updateProduct(Product product){
+  Future<bool> updateProduct(Product product){
     _isUpdatingProduct = true;
     notifyListeners();
 
@@ -55,7 +55,13 @@ mixin ProductsModel on ConnectedProductsUserModel{
       products[product.id] = responseProduct;
       _isUpdatingProduct = false;
       notifyListeners();
-    });
+      return true;
+    })
+    .catchError((error){
+        _isUpdatingProduct = false;
+          notifyListeners();
+          return false;
+      });
   }
   
   bool _isUpdatingProduct = false;
@@ -69,6 +75,8 @@ mixin ProductsModel on ConnectedProductsUserModel{
       products.remove(id);
       notifyListeners();
     });
+    
+    
   }
 
   bool _isDeletingProduct = false;
@@ -88,8 +96,7 @@ mixin ProductsModel on ConnectedProductsUserModel{
       createdById: product.createdById,
       isFavorite: !product.isFavorite
     );
-    products[id] = newProduct;
-    notifyListeners();
+    updateProduct(newProduct);
   }
 
   static ProductsModel of(BuildContext context) => ScopedModel.of<ProductsModel>(context);

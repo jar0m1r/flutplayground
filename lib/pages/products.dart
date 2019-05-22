@@ -26,13 +26,18 @@ class ProductsPageState extends State<ProductsPage>{
   Widget _buildCardList(){
     return ScopedModelDescendant<MainModel>(
       builder: (BuildContext context, Widget child, MainModel model){
+        Widget content;
         if(model.isFetchingProducts){
-          return Center(child: CircularProgressIndicator());
+          content = Center(child: CircularProgressIndicator());
         }else if(!model.isFetchingProducts && model.productList.length > 0){
-          return ProductCardListView(displayFavoritesOnly : displayFavoritesOnly);
+          content = ProductCardListView(displayFavoritesOnly : displayFavoritesOnly);
         }else{
-          return Center(child: Text('No products to show'));
+          content = Center(child: Text('No products to show'));
         }
+        return RefreshIndicator(
+            onRefresh: model.fetchProducts,
+            child: content
+        );
       });
   }
 

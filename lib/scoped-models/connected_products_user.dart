@@ -36,7 +36,7 @@ mixin ConnectedProductsUserModel on Model {
     )
   };
 
-   Future<Null> addProduct(Product product) {
+   Future<bool> addProduct(Product product) {
      _isAddingProducts = true;
      notifyListeners();
       Map<String, dynamic> newProductMap = {
@@ -53,6 +53,11 @@ mixin ConnectedProductsUserModel on Model {
       body: json.encode(newProductMap)
       )
       .then((http.Response response){
+        if(response.statusCode != 200 && response.statusCode != 200){
+          _isAddingProducts = false;
+          notifyListeners();
+          return false;
+        }
         final Map<String, dynamic> responseData = json.decode(response.body);
         Product newProduct = Product(
           id: responseData['name'],
@@ -67,6 +72,12 @@ mixin ConnectedProductsUserModel on Model {
         products[newProduct.id] = newProduct;
         _isAddingProducts = false;
         notifyListeners();
+        return true;
+      })
+      .catchError((error){
+        _isAddingProducts = false;
+          notifyListeners();
+          return false;
       });
   }
 
@@ -75,9 +86,9 @@ mixin ConnectedProductsUserModel on Model {
     return _isAddingProducts;
   }
 
-  void fetchProducts(){
+  Future<bool> fetchProducts(){
     _isFetchingProducts = true;
-    http
+    return http
     .get('https://flutplayground.firebaseio.com/products.json')
     .then((http.Response response) {
       final Map<String, Product> fetchedProducts = {};
@@ -86,7 +97,7 @@ mixin ConnectedProductsUserModel on Model {
       if(responseData == null){
         _isFetchingProducts = false;
         notifyListeners();
-        return;
+        return true;
       }
 
       responseData.forEach((String productId, dynamic data) {
@@ -105,6 +116,12 @@ mixin ConnectedProductsUserModel on Model {
       products = fetchedProducts;
       _isFetchingProducts = false;
       notifyListeners();
+      return true;
+    })
+    .catchError((error){
+      _isFetchingProducts = false;
+      notifyListeners();
+      return false;
     });
   }
 
