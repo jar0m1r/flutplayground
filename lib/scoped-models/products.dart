@@ -17,7 +17,7 @@ mixin ProductsModel on ConnectedProductsUserModel{
     return products[id];
   }
 
-  Future<bool> updateProduct(Product product){
+  Future<bool> updateProduct(Product product) async {
     _isUpdatingProduct = true;
     notifyListeners();
 
@@ -31,37 +31,39 @@ mixin ProductsModel on ConnectedProductsUserModel{
       'isFavorite': product.isFavorite
     };
 
-    return http.put(
-      'https://flutplayground.firebaseio.com/products/${product.id}.json', 
-      body: json.encode(updatedProduct)
-    )
-    .then((http.Response response){
+    try {
+      final http.Response response = await http.put(
+        'https://flutplayground.firebaseio.com/products/${product.id}.json', 
+        body: json.encode(updatedProduct)
+      );
+
       if(response.body == null){
         print('Update Response Body from Server is Null');
         _isUpdatingProduct = false;
         notifyListeners();
       }
+
       Map<String, dynamic> responseData = json.decode(response.body);
       Product responseProduct = Product(
-      id: responseData['name'],
-      title: responseData['title'],
-      description: responseData['description'],
-      location: responseData['location'],
-      price: responseData['price'],
-      image: responseData['image'],
-      createdById: responseData['createdById'],
-      isFavorite: responseData['isFavorite']
+        id: responseData['name'],
+        title: responseData['title'],
+        description: responseData['description'],
+        location: responseData['location'],
+        price: responseData['price'],
+        image: responseData['image'],
+        createdById: responseData['createdById'],
+        isFavorite: responseData['isFavorite']
       );
+
       products[product.id] = responseProduct;
       _isUpdatingProduct = false;
       notifyListeners();
       return true;
-    })
-    .catchError((error){
+    } catch (error) {
         _isUpdatingProduct = false;
           notifyListeners();
           return false;
-      });
+    }
   }
   
   bool _isUpdatingProduct = false;
@@ -69,14 +71,16 @@ mixin ProductsModel on ConnectedProductsUserModel{
     return _isUpdatingProduct;
   } 
 
-  void deleteProduct(String id){
-    http.delete('https://flutplayground.firebaseio.com/products/$id.json')
-    .then((http.Response response){
+  Future<Null> deleteProduct(String id) async {
+    try {
+      final http.Response response = await http.delete('https://flutplayground.firebaseio.com/products/$id.json');
+      print('Delete response : ${response.toString()}');
       products.remove(id);
       notifyListeners();
-    });
-    
-    
+    }
+    catch (error) {
+      return;
+    }
   }
 
   bool _isDeletingProduct = false;

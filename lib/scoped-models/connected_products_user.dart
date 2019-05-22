@@ -36,10 +36,11 @@ mixin ConnectedProductsUserModel on Model {
     )
   };
 
-   Future<bool> addProduct(Product product) {
-     _isAddingProducts = true;
-     notifyListeners();
-      Map<String, dynamic> newProductMap = {
+   Future<bool> addProduct(Product product) async {
+    _isAddingProducts = true;
+    notifyListeners();
+
+    Map<String, dynamic> newProductMap = {
       'title': product.title,
       'description': product.description,
       'location': product.location,
@@ -47,50 +48,55 @@ mixin ConnectedProductsUserModel on Model {
       'image': product.image,
       'createdById': authenticatedUser != null ? authenticatedUser.id : 'abcdefg', //! this is the reason why it is in the connected model, connecting user and product data
       'isFavorite': product.isFavorite     // ? but maybe it is better to keep models separate and let the page handle providing User data ?
-      };
-     return http.post(
-      'https://flutplayground.firebaseio.com/products.json',
-      body: json.encode(newProductMap)
-      )
-      .then((http.Response response){
-        if(response.statusCode != 200 && response.statusCode != 200){
-          _isAddingProducts = false;
-          notifyListeners();
-          return false;
-        }
-        final Map<String, dynamic> responseData = json.decode(response.body);
-        Product newProduct = Product(
-          id: responseData['name'],
-          title: product.title,
-          description: product.description,
-          location: product.location,
-          price: product.price,
-          image: product.image,
-          createdById: authenticatedUser != null ? authenticatedUser.id : 'abcdefg', //! this is the reason why it is in the connected model, connecting user and product data
-          isFavorite: product.isFavorite     // ? but maybe it is better to keep models separate and let the page handle providing User data ?
-        );
-        products[newProduct.id] = newProduct;
+    };
+
+    try {
+      final http.Response response = await http.post(
+        'https://flutplayground.firebaseio.com/products.json',
+        body: json.encode(newProductMap)
+      );
+
+      if(response.statusCode != 200 && response.statusCode != 200){
         _isAddingProducts = false;
         notifyListeners();
-        return true;
-      })
-      .catchError((error){
-        _isAddingProducts = false;
-          notifyListeners();
-          return false;
-      });
-  }
+        return false;
+      }
+
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      Product newProduct = Product(
+        id: responseData['name'],
+        title: product.title,
+        description: product.description,
+        location: product.location,
+        price: product.price,
+        image: product.image,
+        createdById: authenticatedUser != null ? authenticatedUser.id : 'abcdefg', //! this is the reason why it is in the connected model, connecting user and product data
+        isFavorite: product.isFavorite     // ? but maybe it is better to keep models separate and let the page handle providing User data ?
+      );
+
+      products[newProduct.id] = newProduct;
+      _isAddingProducts = false;
+      notifyListeners();
+      return true;
+
+    } catch (error) {
+      _isAddingProducts = false;
+      notifyListeners();
+      return false;
+    }
+}
 
   bool _isAddingProducts = false;
   bool get isAddingProducts{
     return _isAddingProducts;
   }
 
-  Future<bool> fetchProducts(){
+  Future<bool> fetchProducts() async{
     _isFetchingProducts = true;
-    return http
-    .get('https://flutplayground.firebaseio.com/products.json')
-    .then((http.Response response) {
+    
+    try {
+      final http.Response response = await http.get('https://flutplayground.firebaseio.com/products.json');
+      
       final Map<String, Product> fetchedProducts = {};
       final Map<String, dynamic> responseData = json.decode(response.body);
 
@@ -117,12 +123,11 @@ mixin ConnectedProductsUserModel on Model {
       _isFetchingProducts = false;
       notifyListeners();
       return true;
-    })
-    .catchError((error){
+    } catch (error) {
       _isFetchingProducts = false;
       notifyListeners();
       return false;
-    });
+    }
   }
 
   bool _isFetchingProducts = false;
