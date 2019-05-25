@@ -5,12 +5,12 @@ import 'pages/products.dart';
 import 'pages/product.dart';
 import 'pages/auth.dart';
 import 'scoped-models/main.dart';
-// import 'package:flutter/rendering.dart';
+//import 'package:flutter/rendering.dart';
 
 void main() {
-  // debugPaintSizeEnabled = true;
-  // debugPaintBaselinesEnabled = true;
-  // debugPaintPointersEnabled = true;
+  //debugPaintSizeEnabled = true;
+  //debugPaintBaselinesEnabled = true;
+  //debugPaintPointersEnabled = true;
   runApp(MyApp());
 }
 
@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp>{
     return ScopedModel<MainModel>(
       model: MainModel(),
       child: MaterialApp(
-        // debugShowMaterialGrid: true,
+       //debugShowMaterialGrid: true,
         theme: ThemeData(
             brightness: Brightness.light,
             primarySwatch: Colors.deepOrange,

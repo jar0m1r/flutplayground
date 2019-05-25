@@ -54,14 +54,13 @@ class ProductCard extends StatelessWidget {
   Widget _buildImage(){
     return product.image.startsWith('assets') 
     ? Image.asset(
-        product.image, 
+        product.image,
         fit: BoxFit.cover, 
         colorBlendMode: BlendMode.softLight, 
         color: Colors.amber
       )
     : FadeInImage(
         fit: BoxFit.cover,
-        height: 300.0,
         placeholder: AssetImage(
           'assets/food.jpg', 
         ),
@@ -76,16 +75,19 @@ class ProductCard extends StatelessWidget {
     return Card(
       child: Column(
         children: <Widget>[
-          Stack(
-            alignment: AlignmentDirectional.bottomCenter,
-            children: [
-              _buildImage(),
-              Container( // ! location
-                margin: EdgeInsets.only(bottom: 10.0),
-                alignment: Alignment.topLeft,
-                child: LocationTag(product.location)
-              )
-            ]
+          Container(
+            height: 250.0,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                _buildImage(),
+                Container( // ! location
+                  margin: EdgeInsets.only(top: 10.0),
+                  alignment: Alignment.topRight,
+                  child: LocationTag(product.location)
+                )
+              ]
+            ),
           ),
           Container( // ! title & price
             margin: EdgeInsets.only(top: 20.0),
